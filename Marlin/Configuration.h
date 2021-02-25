@@ -503,9 +503,9 @@
     #define DEFAULT_Kd_LIST { 114.00, 114.00 }
   #else
     // Dyzeend pro at 200 deg C "M303 E0 C8 S200"
-    #define DEFAULT_Kp 5.05
+    #define DEFAULT_Kp 5.01
     #define DEFAULT_Ki 0.12
-    #define DEFAULT_Kd 51.14
+    #define DEFAULT_Kd 51.48
   #endif
 #endif // PIDTEMP
 
@@ -781,7 +781,7 @@
  * Override with M92
  *                                      X, Y, Z, E0 [, E1[, E2...]]
  */
-#define DEFAULT_AXIS_STEPS_PER_UNIT   { 80, 80, 400, 582 }
+#define DEFAULT_AXIS_STEPS_PER_UNIT   { 82.82, 82.82, 391.20, 684.71 }
 
 /**
  * Default Max Feed Rate (mm/s)
@@ -1148,10 +1148,10 @@
 
 #define UNKNOWN_Z_NO_RAISE      // Don't raise Z (lower the bed) if Z is "unknown." For beds that fall when Z is powered off.
 
-#define Z_HOMING_HEIGHT  5      // (mm) Minimal Z height before homing (G28) for Z clearance above the bed, clamps, ...
+#define Z_HOMING_HEIGHT 152.5      // (mm) Minimal Z height before homing (G28) for Z clearance above the bed, clamps, ...
                                   // Be sure to have this much clearance over your Z_MAX_POS to prevent grinding.
 
-#define Z_AFTER_HOMING  5      // (mm) Height to move to after homing Z
+#define Z_AFTER_HOMING 152.5      // (mm) Height to move to after homing Z
 
 // Direction of endstops when homing; 1=MAX, -1=MIN
 // :[-1,1]
@@ -1171,7 +1171,7 @@
 #define Z_MIN_POS 0
 #define X_MAX_POS X_BED_SIZE
 #define Y_MAX_POS Y_BED_SIZE
-#define Z_MAX_POS 150
+#define Z_MAX_POS 152.6
 
 /**
  * Software Endstops
