@@ -305,23 +305,7 @@ void GcodeSuite::G28() {
                home_all = homeX == homeY && homeX == homeZ, // All or None
                doX = home_all || homeX, doY = home_all || homeY, doZ = home_all || homeZ;
 
-    #if Z_HOME_DIR > 0  // If homing away from BED do Z first
-
-      if (doZ) homeaxis(Z_AXIS);
-
-    #endif
-
-    const float z_homing_height =
-      ENABLED(UNKNOWN_Z_NO_RAISE) && !TEST(axis_known_position, Z_AXIS)
-        ? 0
-        : (parser.seenval('R') ? parser.value_linear_units() : Z_HOMING_HEIGHT);
-
-    if (z_homing_height && (doX || doY || (ENABLED(Z_SAFE_HOMING) && doZ))) {
-      // Raise Z before homing any other axes and z is not already high enough (never lower z)
-      if (DEBUGGING(LEVELING)) DEBUG_ECHOLNPAIR("Raise Z (before homing) by ", z_homing_height);
-      do_z_clearance(z_homing_height, true, DISABLED(UNKNOWN_Z_NO_RAISE));
-    }
-
+    // Delete below to conserve initial order
     #if ENABLED(QUICK_HOME)
 
       if (doX && doY) quick_home_xy();
@@ -358,6 +342,64 @@ void GcodeSuite::G28() {
         homeaxis(X_AXIS);
 
       #endif
+    // Delete above to conserve initial order
+            
+    
+    #if Z_HOME_DIR > 0  // If homing away from BED do Z first
+
+      if (doZ) homeaxis(Z_AXIS);
+
+    #endif
+
+    const float z_homing_height =
+      ENABLED(UNKNOWN_Z_NO_RAISE) && !TEST(axis_known_position, Z_AXIS)
+        ? 0
+        : (parser.seenval('R') ? parser.value_linear_units() : Z_HOMING_HEIGHT);
+
+    if (z_homing_height && (doX || doY || (ENABLED(Z_SAFE_HOMING) && doZ))) {
+      // Raise Z before homing any other axes and z is not already high enough (never lower z)
+      if (DEBUGGING(LEVELING)) DEBUG_ECHOLNPAIR("Raise Z (before homing) by ", z_homing_height);
+      do_z_clearance(z_homing_height, true, DISABLED(UNKNOWN_Z_NO_RAISE));
+    }
+
+    /* Original order
+    #if ENABLED(QUICK_HOME)
+
+      if (doX && doY) quick_home_xy();
+
+    #endif
+
+    // Home Y (before X)
+    if (ENABLED(HOME_Y_BEFORE_X) && (doY || (ENABLED(CODEPENDENT_XY_HOMING) && doX)))
+      homeaxis(Y_AXIS);
+
+    // Home X
+    if (doX || (doY && ENABLED(CODEPENDENT_XY_HOMING) && DISABLED(HOME_Y_BEFORE_X))) {
+
+      #if ENABLED(DUAL_X_CARRIAGE)
+
+        // Always home the 2nd (right) extruder first
+        active_extruder = 1;
+        homeaxis(X_AXIS);
+
+        // Remember this extruder's position for later tool change
+        inactive_extruder_x_pos = current_position.x;
+
+        // Home the 1st (left) extruder
+        active_extruder = 0;
+        homeaxis(X_AXIS);
+
+        // Consider the active extruder to be parked
+        raised_parked_position = current_position;
+        delayed_move_time = 0;
+        active_extruder_parked = true;
+
+      #else
+
+        homeaxis(X_AXIS);
+
+      #endif
+     */
     }
 
     // Home Y (after X)
