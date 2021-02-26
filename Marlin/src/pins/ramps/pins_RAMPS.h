@@ -163,11 +163,14 @@
 #ifndef TEMP_0_PIN
   #define TEMP_0_PIN                          13  // Analog Input
 #endif
-#ifndef TEMP_1_PIN
-  #define TEMP_1_PIN                          15  // Analog Input
-#endif
+//#ifndef TEMP_1_PIN
+//  #define TEMP_1_PIN                          15  // Analog Input
+//#endif
 #ifndef TEMP_BED_PIN
   #define TEMP_BED_PIN                        14  // Analog Input
+#endif
+#ifndef TEMP_CHAMBER_PIN
+  #define TEMP_CHAMBER_PIN                    15  // Analog Input
 #endif
 
 //
