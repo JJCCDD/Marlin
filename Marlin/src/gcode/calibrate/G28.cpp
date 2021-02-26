@@ -305,46 +305,19 @@ void GcodeSuite::G28() {
                home_all = homeX == homeY && homeX == homeZ, // All or None
                doX = home_all || homeX, doY = home_all || homeY, doZ = home_all || homeZ;
 
-    // Delete below to conserve initial order
-    #if ENABLED(QUICK_HOME)
+    #if Z_HOME_DIR < 0
 
-      if (doX && doY) quick_home_xy();
+      if (doZ) {
+        TERN_(BLTOUCH, bltouch.init());
 
-    #endif
+        TERN(Z_SAFE_HOMING, home_z_safely(), homeaxis(Z_AXIS));
 
-    // Home Y (before X)
-    if (ENABLED(HOME_Y_BEFORE_X) && (doY || (ENABLED(CODEPENDENT_XY_HOMING) && doX)))
-      homeaxis(Y_AXIS);
+        probe.move_z_after_homing();
 
-    // Home X
-    if (doX || (doY && ENABLED(CODEPENDENT_XY_HOMING) && DISABLED(HOME_Y_BEFORE_X))) {
+      } // doZ
 
-      #if ENABLED(DUAL_X_CARRIAGE)
+    #endif // Z_HOME_DIR < 0
 
-        // Always home the 2nd (right) extruder first
-        active_extruder = 1;
-        homeaxis(X_AXIS);
-
-        // Remember this extruder's position for later tool change
-        inactive_extruder_x_pos = current_position.x;
-
-        // Home the 1st (left) extruder
-        active_extruder = 0;
-        homeaxis(X_AXIS);
-
-        // Consider the active extruder to be parked
-        raised_parked_position = current_position;
-        delayed_move_time = 0;
-        active_extruder_parked = true;
-
-      #else
-
-        homeaxis(X_AXIS);
-
-      #endif
-    // Delete above to conserve initial order
-            
-    
     #if Z_HOME_DIR > 0  // If homing away from BED do Z first
 
       if (doZ) homeaxis(Z_AXIS);
@@ -362,7 +335,6 @@ void GcodeSuite::G28() {
       do_z_clearance(z_homing_height, true, DISABLED(UNKNOWN_Z_NO_RAISE));
     }
 
-    /* Original order
     #if ENABLED(QUICK_HOME)
 
       if (doX && doY) quick_home_xy();
@@ -399,7 +371,6 @@ void GcodeSuite::G28() {
         homeaxis(X_AXIS);
 
       #endif
-     */
     }
 
     // Home Y (after X)
@@ -407,20 +378,6 @@ void GcodeSuite::G28() {
       homeaxis(Y_AXIS);
 
     TERN_(IMPROVE_HOMING_RELIABILITY, end_slow_homing(slow_homing));
-
-    // Home Z last if homing towards the bed
-    #if Z_HOME_DIR < 0
-
-      if (doZ) {
-        TERN_(BLTOUCH, bltouch.init());
-
-        TERN(Z_SAFE_HOMING, home_z_safely(), homeaxis(Z_AXIS));
-
-        probe.move_z_after_homing();
-
-      } // doZ
-
-    #endif // Z_HOME_DIR < 0
 
     sync_plan_position();
 
