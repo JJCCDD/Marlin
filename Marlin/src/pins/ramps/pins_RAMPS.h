@@ -235,13 +235,13 @@
 
 #ifndef FAN_PIN
   #if EITHER(IS_RAMPS_EFB, IS_RAMPS_EFF)          // Hotend, Fan, Bed or Hotend, Fan, Fan
-    #define FAN_PIN                 RAMPS_D9_PIN
+    #define FAN_PIN                 -1
   #elif EITHER(IS_RAMPS_EEF, IS_RAMPS_SF)         // Hotend, Hotend, Fan or Spindle, Fan
     #define FAN_PIN                 RAMPS_D8_PIN
   #elif ENABLED(IS_RAMPS_EEB)                     // Hotend, Hotend, Bed
     #define FAN_PIN                            4  // IO pin. Buffer needed
   #else                                           // Non-specific are "EFB" (i.e., "EFBF" or "EFBE")
-    #define FAN_PIN                 RAMPS_D9_PIN
+    #define FAN_PIN                 -1
   #endif
 #endif
 
