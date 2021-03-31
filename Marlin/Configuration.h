@@ -455,7 +455,7 @@
 
 // Below this temperature the heater will be switched off
 // because it probably indicates a broken thermistor wire.
-#define HEATER_0_MINTEMP   21
+#define HEATER_0_MINTEMP   5
 #define HEATER_1_MINTEMP   5
 #define HEATER_2_MINTEMP   5
 #define HEATER_3_MINTEMP   5
@@ -476,7 +476,7 @@
 #define HEATER_5_MAXTEMP 275
 #define HEATER_6_MAXTEMP 275
 #define HEATER_7_MAXTEMP 275
-#define BED_MAXTEMP      150
+#define BED_MAXTEMP      180
 
 //===========================================================================
 //============================= PID Settings ================================
@@ -506,10 +506,27 @@
     //#define DEFAULT_Kp 5.01
     //#define DEFAULT_Ki 0.12
     //#define DEFAULT_Kd 51.48
+
     // Dyzeend pro with water cooling at 200 deg C "M303 E0 C8 S200"
-    #define DEFAULT_Kp 4.98
-    #define DEFAULT_Ki 0.13
-    #define DEFAULT_Kd 46.16
+    //#define DEFAULT_Kp 4.98
+    //#define DEFAULT_Ki 0.13
+    //#define DEFAULT_Kd 46.16
+
+    // Dyzeend pro with water cooling at 230 deg C "M303 E0 C8 S230"
+    //#define DEFAULT_Kp 9.49
+    //#define DEFAULT_Ki 0.34
+    //#define DEFAULT_Kd 66.10
+
+    // Dyzeend pro with water cooling at 385 deg C "M303 E0 C8 S385"
+    //#define DEFAULT_Kp 12.38
+    //#define DEFAULT_Ki 0.47
+    //#define DEFAULT_Kd 82.13
+
+    // Dyzeend pro with water cooling at 385 deg C "M303 E0 C8 S385" 
+    #define DEFAULT_Kp 32.73
+    #define DEFAULT_Ki 1.2
+    #define DEFAULT_Kd 223.23
+
   #endif
 #endif // PIDTEMP
 
@@ -574,9 +591,9 @@
   //< 2:21:33 PM: #define DEFAULT_bedKp 13.68
   //< 2:21:33 PM: #define DEFAULT_bedKi 0.63
   //< 2:21:33 PM: #define DEFAULT_bedKd 198.00
-  #define DEFAULT_bedKp 13.68
-  #define DEFAULT_bedKi 0.63
-  #define DEFAULT_bedKd 198.00
+  //#define DEFAULT_bedKp 13.68
+  //#define DEFAULT_bedKi 0.63
+  //#define DEFAULT_bedKd 198.00
 
   // Pour le bed E3D à 140 deg C  - valeurs obtenues avec PID autotune "M303 E-1 C8 S140"
   //< 2:36:31 PM: #define DEFAULT_bedKp 12.77
@@ -585,7 +602,16 @@
   //#define DEFAULT_bedKp 12.77 
   //#define DEFAULT_bedKi 0.56
   //#define DEFAULT_bedKd 195.31
+  
+  // Pour le bed E3D à 150 deg C  - valeurs obtenues avec PID autotune "M303 E-1 C8 S150"
+  //#define DEFAULT_bedKp 12.39
+  //#define DEFAULT_bedKi 0.56
+  //#define DEFAULT_bedKd 181.99
 
+  // Pour le bed E3D à 150 deg C  - valeurs obtenues avec PID autotune "M303 E-1 C8 S150" *** Avec chambre à 85 deg C
+  #define DEFAULT_bedKp 13.14
+  #define DEFAULT_bedKi 0.66
+  #define DEFAULT_bedKd 175.08
 
   // FIND YOUR OWN: "M303 E-1 C8 S90" to run autotune on the bed at 90 degreesC for 8 cycles.
 #endif // PIDTEMPBED
@@ -634,8 +660,8 @@
  * details can be tuned in Configuration_adv.h
  */
 
-#define THERMAL_PROTECTION_HOTENDS // Enable thermal protection for all extruders
-#define THERMAL_PROTECTION_BED     // Enable thermal protection for the heated bed
+//#define THERMAL_PROTECTION_HOTENDS // Enable thermal protection for all extruders
+//#define THERMAL_PROTECTION_BED     // Enable thermal protection for the heated bed
 //#define THERMAL_PROTECTION_CHAMBER // Enable thermal protection for the heated chamber
 
 //===========================================================================
@@ -663,10 +689,10 @@
 // Specify here all the endstop connectors that are connected to any endstop or probe.
 // Almost all printers will be using one per axis. Probes will use one or more of the
 // extra connectors. Leave undefined any used for non-endstop and non-probe purposes.
-#define USE_XMIN_PLUG
+//#define USE_XMIN_PLUG
 #define USE_YMIN_PLUG
 #define USE_ZMIN_PLUG
-//#define USE_XMAX_PLUG
+#define USE_XMAX_PLUG
 //#define USE_YMAX_PLUG
 //#define USE_ZMAX_PLUG
 
@@ -701,7 +727,7 @@
 #define X_MIN_ENDSTOP_INVERTING true // Set to true to invert the logic of the endstop.
 #define Y_MIN_ENDSTOP_INVERTING true // Set to true to invert the logic of the endstop.
 #define Z_MIN_ENDSTOP_INVERTING true // Set to true to invert the logic of the endstop.
-#define X_MAX_ENDSTOP_INVERTING false // Set to true to invert the logic of the endstop.
+#define X_MAX_ENDSTOP_INVERTING true // Set to true to invert the logic of the endstop.
 #define Y_MAX_ENDSTOP_INVERTING false // Set to true to invert the logic of the endstop.
 #define Z_MAX_ENDSTOP_INVERTING false // Set to true to invert the logic of the endstop.
 #define Z_MIN_PROBE_ENDSTOP_INVERTING false // Set to true to invert the logic of the probe.
@@ -785,7 +811,7 @@
  * Override with M92
  *                                      X, Y, Z, E0 [, E1[, E2...]]
  */
-#define DEFAULT_AXIS_STEPS_PER_UNIT   { 81.08, 81.08, 399.80, 677.93 }
+#define DEFAULT_AXIS_STEPS_PER_UNIT   { 81.08, 81.08, 399.80, 673.79 }
 
 /**
  * Default Max Feed Rate (mm/s)
@@ -1166,15 +1192,15 @@
 // @section machine
 
 // The size of the print bed
-#define X_BED_SIZE 200
-#define Y_BED_SIZE 200
+#define X_BED_SIZE 100
+#define Y_BED_SIZE 100
 
 // Travel limits (mm) after homing, corresponding to endstop positions.
-#define X_MIN_POS -8
-#define Y_MIN_POS -8
+#define X_MIN_POS 10
+#define Y_MIN_POS -30
 #define Z_MIN_POS 0
 #define X_MAX_POS 220
-#define Y_MAX_POS 180
+#define Y_MAX_POS 160
 #define Z_MAX_POS 142.1
 
 /**
